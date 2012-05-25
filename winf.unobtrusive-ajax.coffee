@@ -1,144 +1,194 @@
 ###
 Better Unobtrusive Ajax for ASP.NET MVC
-version 0.1 (2012-05-24)
-(c) 2012 Dusan Hlavaty, WorkInField s.r.o.
-freely distributable under The MIT License (MIT)
+=======================================
+version 0.1 (2012-05-25)  
+(c) 2012 Dusan Hlavaty, WorkInField s.r.o.  
+freely distributable under The MIT License (MIT)  
 https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 ###
-#
+# 
+# Purpose:
+# --------
+# 
 # Purpose of this library is to be 100% compatible with 'Microsofts Unobtrusive Ajax support library for jQuery'
 # found in ASP.NET MVC3 and MVC4 but without bugs, with new features, clean and well documented code and compatible
 # with latest jQuery.
-#
+# 
 # Usage:
-#   Just replace original 'jquery.unobtrusive-ajax.js' or 'jquery.unobtrusive-ajax.min.js' with our
-#   'winf.unobtrusive-ajax.js' and you are all set. All other requirements are the same as with original script
-#   from Microsoft, see tutorial at http://goo.gl/3DTJY
-#
+# ------
+# 
+# Just replace original 'jquery.unobtrusive-ajax.js' or 'jquery.unobtrusive-ajax.min.js' with our
+# 'winf.unobtrusive-ajax.js' and you are all set. All other requirements are the same as with original script
+# from Microsoft, see tutorial at [http://goo.gl/3DTJY](http://goo.gl/3DTJY)
+# 
+# Changelog:
+# ----------
+# 
+# 2012-05-24 ver 0.1 - Initial version  
+# 2012-05-25 ver 0.1 - All code comments are in English, no code changes
+# 
 # Docs:
-# ( all ajax data attributes are 100% compatible with Microsoft ASP.NET MVC 3 - http://www.asp.net/mvc/mvc3 )
-#
-# data-ajax-loading          - attribute which contains element selector to element showing "LOADING IN PROGRESS" text
-#
-# data-ajax-loading-duration - how long should show/hide animation of "LOADING IN PROGRESS" text take.
-#                              Animation duration is given in milliseconds. Default is 0.
-#
-#                              Example:
-#                                   <div id="loading">AJAX IS IN PROGRESS</div>
-#                                   <a data-ajax-loading="#loading" data-ajax-loading-duration="1000" ... />
-#
-#
-# data-ajax-confirm - attribute contains a confirmation question. If user hit CANCEL button on a confirmation dialog,
-#                     AJAX call will NOT be fired.
-#                     Example:
-#                         <a data-ajax-confirm="Are you sure to delete entry ?" ... />
-#
-# data-ajax-method  - The type of request to make ("POST" or "GET").
-#                     jQuery DOCUMENTATION NOTE: Other HTTP request methods, such as "PUT" and "DELETE",
-#                     can also be used here, but they are not supported by all browsers.
-#
-#                     Example:
-#                         <a data-ajax-method="post" ... />
-#
-# data-ajax-mode    - Mode of displaying ajax response sent from server. Can be "BEFORE", "AFTER" or "REPLACE" (default)
-#                     Every other settings is threated as "REPLACE".
-#
-#                     "BEFORE"  - response data is prepended as a first child of target ('data-ajax-update') element.
-#                                 Note: Target element is NOT emptied before inserting.
-#                     "AFTER"   - response data is appended as a last child of target ('data-ajax-update') element.
-#                                 Note: Target element is NOT emptied before inserting.
-#                     "REPLACE" - response data replaces inner content of target ('data-ajax-update') element and
-#                                 NOT an element itseft. So every attribute (e.g. <div id="someId">) of target element
-#                                 will stay intact.
-#                                 Note: Target element IS emptied before inserting.
-#
-#                     Example:
-#                         <a data-ajax-mode="replace" ... />
-#
-# data-ajax-update  - attribute which contains element selector to element in which ajax response will be shown.
-#
-#                     Example:
-#                         <div id="ajaxTarget">...this will be replaced with ajax response...</div>
-#                         <a data-ajax-update="#ajaxTarget" data-ajax-mode="replace" ... />
-#
-# data-ajax-url     - URL of ajax request to perform. If this attribute is not defined in <a /> element,
-#                     the 'href' attribute will be used.
-#
-#                     Example:
-#                         <a data-ajax-url="http://www.acme.com/ajax" href="http://www.acme.com/nonajax" ... />
-#
-# data-ajax-begin   - event callback, which is called before ajax request itself is fired.
-#                     Returning "false" from this callback will cancel the request.
-#                     If attribute contains an function name, this function is called with signature:
-#                     function beforeAjaxRequest(jqXHR)
-#                       Returns: boolean
-#                       Params:                        
-#                                jqXHR - is an jQuery XHR object (see http://api.jquery.com/Types/#jqXHR
-#                                        and http://api.jquery.com/jQuery.ajax/#jqXHR )
-#
-#                       Example 1:
-#                           <script> function BeforeSendFunctionName(jqXHR) { return true; } </script>
-#                           <a data-ajax-begin="BeforeSendFunctionName" ... />
-#
-#                       Example 2:
-#                           <a data-ajax-begin="alert('We stop AJAX at all costs.');return false;" ... />
-#
-# data-ajax-complete - event callback, which is called when ajax request itself was completed.
-#                      A function will be called after 'success' and 'error' callbacks are executed.
-#                      If attribute contains an function name, this function is called with signature:
-#                      function completeAjaxRequest(jqXHR, textStatus)
-#                       Returns: undefined
-#                       Params:                        
-#                                jqXHR - is an jQuery XHR object (see http://api.jquery.com/Types/#jqXHR
-#                                        and http://api.jquery.com/jQuery.ajax/#jqXHR )
-#                                textStatus - can be "success", "notmodified", "error", "timeout",
-#                                             "abort" or "parsererror"
-#                                             (see paragraph "complete(jqXHR, textStatus)" at http://api.jquery.com/jQuery.ajax/)
-#
-#                       Example 1:
-#                           <script> function CompleteSendFunctionName(jqXHR, textStatus) { alert('All done'); } </script>
-#                           <a data-ajax-complete="CompleteSendFunctionName" ... />
-#
-#                       Example 2:
-#                           <a data-ajax-complete="alert('All done');" ... />
-#
-# data-ajax-success  - event callback, which is called if ajax request succeeds.
-#                      If attribute contains an function name, this function is called with signature:
-#                      function successAjaxRequest(data, textStatus, jqXHR)
-#                       Returns: undefined
-#                       Params:                        
-#                                data       - the data returned from the server
-#                                textStatus - a string describing the status
-#                                             (see paragraph "success(data, textStatus, jqXHR)" at http://api.jquery.com/jQuery.ajax/)
-#                                jqXHR      - is an jQuery XHR object (see http://api.jquery.com/Types/#jqXHR
-#                                             and http://api.jquery.com/jQuery.ajax/#jqXHR )
-#
-#                       Example 1:
-#                           <script> function SuccessSendFunctionName(data, textStatus, jqXHR) { alert('Success'); } </script>
-#                           <a data-ajax-success="SuccessSendFunctionName" ... />
-#
-#                       Example 2:
-#                           <a data-ajax-success="alert('Success');" ... />
-#
-# data-ajax-error    - event callback, which is called if ajax request fails.
-#                      Note: This handler is not called for cross-domain script and JSONP requests.
-#                      If attribute contains an function name, this function is called with signature:
-#                      function errorAjaxRequest(jqXHR, textStatus, errorThrown)
-#                       Returns: undefined
-#                       Params:                        
-#                                jqXHR       - is an jQuery XHR object (see http://api.jquery.com/Types/#jqXHR
-#                                              and http://api.jquery.com/jQuery.ajax/#jqXHR )
-#                                textStatus  - "timeout", "error", "abort", and "parsererror" (or null)
-#                                              (see paragraph "error(jqXHR, textStatus, errorThrown)" at http://api.jquery.com/jQuery.ajax/)
-#                                errorThrown - when an HTTP error occurs, errorThrown receives the textual portion
-#                                              of the HTTP status, such as "Not Found" or "Internal Server Error."
-#
-#                       Example 1:
-#                           <script> function ErrorSendFunctionName(jqXHR, textStatus, errorThrown) { alert('Sorry error !'); } </script>
-#                           <a data-ajax-error="ErrorSendFunctionName" ... />
-#
-#                       Example 2:
-#                           <a data-ajax-error="alert('Sorry error !');" ... />
+# -----
+# 
+# All ajax data attributes are 100% compatible with Microsoft ASP.NET MVC 3 - [http://www.asp.net/mvc/mvc3](http://www.asp.net/mvc/mvc3)
+# 
+# 
+# ### data-ajax-loading
+# 
+# attribute which contains element selector to element showing "LOADING IN PROGRESS" text
+# 
+# 
+# ### data-ajax-loading-duration
+# 
+# how long should show/hide animation of "LOADING IN PROGRESS" text take. Animation duration is given in milliseconds. Default is 0.
+# 
+#     Example:
+#     <div id="loading">AJAX IS IN PROGRESS</div>
+#     <a data-ajax-loading="#loading" data-ajax-loading-duration="1000" ... />
+# 
+# 
+# ### data-ajax-confirm
+# 
+# attribute contains a confirmation question. If user hit CANCEL button on a confirmation dialog, AJAX call will NOT be fired.
+# 
+#     Example:
+#     <a data-ajax-confirm="Are you sure to delete entry ?" ... />
+# 
+# 
+# ### data-ajax-method
+# 
+# The type of request to make ("POST" or "GET"). *jQuery documentation note: Other HTTP request methods, such as "PUT" and "DELETE", can also be used here, but they are not supported by all browsers.*
+# 
+#     Example:
+#     <a data-ajax-method="post" ... />
+# 
+# 
+# ### data-ajax-mode
+# 
+# Mode of displaying ajax response sent from server. Can be "BEFORE", "AFTER" or "REPLACE" (default). Every other settings is threated as "REPLACE".
+# 
+# * "BEFORE"  - response data is prepended as a first child of target ('data-ajax-update') element.
+#   Note: Target element is NOT emptied before inserting.
+# 
+# * "AFTER" - response data is appended as a last child of target ('data-ajax-update') element.
+#   Note: Target element is NOT emptied before inserting.
+# 
+# * "REPLACE" - response data replaces inner content of target ('data-ajax-update') element and
+#   NOT an element itseft. So every attribute (e.g. &lt;div id="someId"&gt;) of target element
+#   will stay intact. Note: Target element IS emptied before inserting.
+# 
+# 
+#     Example:
+#     <a data-ajax-mode="replace" ... />
+# 
+# 
+# ### data-ajax-update
+# 
+# attribute which contains element selector to element in which ajax response will be shown.
+# 
+#     Example:
+#     <div id="ajaxTarget">...this will be replaced with ajax response...</div>
+#     <a data-ajax-update="#ajaxTarget" data-ajax-mode="replace" ... />
+# 
+# 
+# ### data-ajax-url
+# 
+# URL of ajax request to perform. If this attribute is not defined in <a /> element, the 'href' attribute will be used.
+# 
+#     Example:
+#     <a data-ajax-url="http://www.acme.com/ajax" href="http://www.acme.com/nonajax" ... />
+# 
+# 
+# ### data-ajax-begin
+# 
+# event callback, which is called before ajax request itself is fired.
+# Returning "false" from this callback will cancel the request.
+# If attribute contains an function name, this function is called with signature:
+# 
+# `function beforeAjaxRequest(jqXHR)`  
+# Returns: boolean  
+# Params:  
+# **jqXHR** - is an jQuery XHR object (see http://api.jquery.com/Types/#jqXHR
+#             and http://api.jquery.com/jQuery.ajax/#jqXHR )
+# 
+#     Example 1:
+#     <script> function BeforeSendFunctionName(jqXHR) { return true; } </script>
+#     <a data-ajax-begin="BeforeSendFunctionName" ... />
+# 
+#     Example 2:
+#     <a data-ajax-begin="alert('We stop AJAX at all costs.');return false;" ... />
+# 
+# 
+# ### data-ajax-complete
+# 
+# event callback, which is called when ajax request itself was completed.
+# A function will be called after 'success' and 'error' callbacks are executed.
+# If attribute contains an function name, this function is called with signature:
+# 
+# `function completeAjaxRequest(jqXHR, textStatus)`  
+# Returns: undefined  
+# Params:  
+# **jqXHR** - is an jQuery XHR object (see http://api.jquery.com/Types/#jqXHR
+#             and http://api.jquery.com/jQuery.ajax/#jqXHR )
+# 
+# **textStatus** - can be "success", "notmodified", "error", "timeout", "abort" or "parsererror"
+#                  (see paragraph "complete(jqXHR, textStatus)" at http://api.jquery.com/jQuery.ajax/)
+# 
+#     Example 1:
+#     <script> function CompleteSendFunctionName(jqXHR, textStatus) { alert('All done'); } </script>
+#     <a data-ajax-complete="CompleteSendFunctionName" ... />
+# 
+#     Example 2:
+#     <a data-ajax-complete="alert('All done');" ... />
+# 
+# 
+# ### data-ajax-success
+# event callback, which is called if ajax request succeeds.
+# If attribute contains an function name, this function is called with signature:
+# 
+# `function successAjaxRequest(data, textStatus, jqXHR)`  
+# Returns: undefined  
+# Params:  
+# **data** - the data returned from the server
+# 
+# **textStatus** - a string describing the status
+#                  (see paragraph "success(data, textStatus, jqXHR)" at http://api.jquery.com/jQuery.ajax/)
+# 
+# **jqXHR** - is an jQuery XHR object (see http://api.jquery.com/Types/#jqXHR
+#             and http://api.jquery.com/jQuery.ajax/#jqXHR )
+# 
+#     Example 1:
+#     <script> function SuccessSendFunctionName(data, textStatus, jqXHR) { alert('Success'); } </script>
+#     <a data-ajax-success="SuccessSendFunctionName" ... />
+# 
+#     Example 2:
+#     <a data-ajax-success="alert('Success');" ... />
+# 
+# 
+# ### data-ajax-error
+# 
+# event callback, which is called if ajax request fails.
+# Note: This handler is not called for cross-domain script and JSONP requests.
+# If attribute contains an function name, this function is called with signature:
+# 
+# `function errorAjaxRequest(jqXHR, textStatus, errorThrown)`  
+# Returns: undefined  
+# Params:  
+# **jqXHR** - is an jQuery XHR object (see http://api.jquery.com/Types/#jqXHR
+#             and http://api.jquery.com/jQuery.ajax/#jqXHR )
+# 
+# **textStatus** - "timeout", "error", "abort", and "parsererror" (or null)
+#                  (see paragraph "error(jqXHR, textStatus, errorThrown)" at http://api.jquery.com/jQuery.ajax/)
+# 
+# **errorThrown** - when an HTTP error occurs, errorThrown receives the textual portion
+#                   of the HTTP status, such as "Not Found" or "Internal Server Error."
+# 
+#     Example 1:
+#     <script> function ErrorSendFunctionName(jqXHR, textStatus, errorThrown) { alert('Sorry error !'); } </script>
+#     <a data-ajax-error="ErrorSendFunctionName" ... />
+# 
+#     Example 2:
+#     <a data-ajax-error="alert('Sorry error !');" ... />
 #
 
 $ = jQuery
@@ -189,11 +239,9 @@ processDataOnSuccess = (element, data, contentType) ->
 
     jqElementToUpdate = $(jqElement.data("ajax-update"))
 
-    # Toto je len jednoducha kontrola, ci 'data-ajax-update' atribut sa odkazuje na spravny element na stranke.
-    # Tato kontrola nam moze odhalit chyby v nasom kode. V produkcnej verzii by sme to ale mali odstranit, resp.
-    # tam by uz mali byt stranky odladene. ;-)
+    # This is just a simple validation, that 'data-ajax-update' points to an existing element on a page
     if jqElementToUpdate.length < 1
-        console?.log "winf.unobtrusive-ajax warning: Cannot find element from 'data-ajax-update' on a page. Do you have a correct BrowserRowId ?"
+        console?.log "winf.unobtrusive-ajax warning: Cannot find element from 'data-ajax-update' on a page."
     else
         switch mode.toUpperCase()
             # this is not really BEFORE, but it is a first child of target (data-ajax-update) element. But we keep compatibility with MS
@@ -219,26 +267,24 @@ processDataOnSuccess = (element, data, contentType) ->
 
 
 
-# Vykona celu logiku AJAX volania
+# Perform a whole AJAX call logic
 makeAjaxCall = (jqElement, ajaxSettings) ->
-    # jqElement - element nad ktorym bol vyvolany event (napr klik na <a />)
+    # jqElement - element on which event was triggered (e.g. click on a <a />)
 
-    # zabezpecime, aby jqElement bol naozaj jQuery objekt (ak by niekto kto tuto metodu zavolal a zabudol na to)
+    # we ensure that jqElement is really an jQuery object
     if not jqElement.jquery?
         jqElement = jQuery jqElement
 
-    # debugger
-
-    # Najpr (ak treba) polozime uzivatelovi otazku ci suhlasi s AJAX requestom
+    # First - we ask user a question, if he agree with ajax request
     questionToConfirm = jqElement.data "ajax-confirm"
     if questionToConfirm?
-        # ak uzivatel v confirm dialogu zvoli CANCEL, tak sa AJAX call nezavola
+        # if user hits CANCEL in a dialog, no AJAX call will be made
         return if not window.confirm questionToConfirm
     
-    # zistime z 'data-ajax-loading', v ktorom elemente mame ulozeny 'LOADING IN PROGRESS' text
+    # get element ('data-ajax-loading') for 'LOADING IN PROGRESS' message
     loadingElement = $(jqElement.data("ajax-loading"))
-    # zistime ako dlho ma trvat animacia show/hide 'LOADING IN PROGRESS' textu
-    loadingDuration = jqElement.data("ajax-loading-duration") or 0 # Duration is given in milliseconds
+    # how long should show or hide animation of 'LOADING IN PROGRESS' message perform (Duration is given in milliseconds)
+    loadingDuration = jqElement.data("ajax-loading-duration") or 0
 
     defaultSettings =
         type: jqElement.data("ajax-method") or `undefined` # The type of request to make ("POST" or "GET").
@@ -247,7 +293,7 @@ makeAjaxCall = (jqElement, ajaxSettings) ->
             # pre-request callback function that can be used to modify
             # the jqXHR (in jQuery 1.4.x, XMLHTTPRequest) object before it is sent.
             
-            # overridneme HTTP metodu ak treba
+            # we override HTTP method if neccessary
             if settings.typeOriginal?
                 # While not normally an issue with thick clients, accessing full RESTful capabilities of available services
                 # via browsers often is problematic as many (if not all) browsers only allow a form to GET or POST. They
@@ -260,22 +306,22 @@ makeAjaxCall = (jqElement, ajaxSettings) ->
                     # rather than concatenating the new value to the old one
                     jqXHR.setRequestHeader "X-HTTP-Method-Override", settings.typeOriginal
  
-            # zavolame kod/funkciu uvedenu v 'data-ajax-begin'
+            # we call code/function stored in 'data-ajax-begin'
             result = createFunctionFromCode(jqElement.data("ajax-begin"), [ "jqXHR" ]).apply(this, arguments)
-            # zobrazime 'LOADING IN PROGRESS' text
+            # show 'LOADING IN PROGRESS' message
             loadingElement.show loadingDuration  if result isnt false # loadingElement je jQuery objekt takze nemusime testovat na null
-            # Returning false in the beforeSend function will cancel the request
+            # returning false in the beforeSend function will cancel the request
             return result
 
         complete: (jqXHR, textStatus) ->
             # A function will be called after 'success' and 'error' callbacks are executed
             # 'textStatus' == "success", "notmodified", "error", "timeout", "abort", or "parsererror"
 
-            # schovame 'LOADING IN PROGRESS' text
+            # hide 'LOADING IN PROGRESS' message
             loadingElement.hide loadingDuration # loadingElement je jQuery objekt takze nemusime testovat na null
-            # zavolame kod/funkciu uvedenu v 'data-ajax-complete'
+            # we call code/function stored in 'data-ajax-complete'
             createFunctionFromCode(jqElement.data("ajax-complete"), [ "jqXHR", "textStatus" ]).apply(this, arguments)
-            # koniec
+            
             return
 
         success: (data, textStatus, jqXHR) ->
@@ -283,7 +329,7 @@ makeAjaxCall = (jqElement, ajaxSettings) ->
 
             processDataOnSuccess jqElement, data, jqXHR.getResponseHeader("Content-Type") or "text/html"
 
-            # zavolame kod/funkciu uvedenu v 'data-ajax-success'
+            # we call code/function stored in 'data-ajax-success'
             createFunctionFromCode(jqElement.data("ajax-success"), [ "data", "textStatus", "jqXHR" ]).apply(this, arguments)
 
             return
@@ -293,10 +339,11 @@ makeAjaxCall = (jqElement, ajaxSettings) ->
             # textStatus == "timeout", "error", "abort", and "parsererror" (or null)
             # Note: This handler is not called for cross-domain script and JSONP requests.
     
-            # zavolame kod/funkciu uvedenu v 'data-ajax-failure'
+            # we call code/function stored in 'data-ajax-failure'
             createFunctionFromCode(jqElement.data("ajax-failure"), [ "jqXHR", "textStatus", "errorThrown" ])
             return
 
+    # combine ajax settings (defaultSettings has precedence)
     $.extend ajaxSettings, defaultSettings
 
     # insert 'X-Requested-With' to DATA sent to server (not sure why, but we want to be compatible with original MS library)
@@ -310,8 +357,10 @@ makeAjaxCall = (jqElement, ajaxSettings) ->
 
     # We must change non safe http method ('PUT', 'DELETE', ...) for a safe one
     if not isHttpMethodSafe(httpMethod)
-        ajaxSettings.typeOriginal = httpMethod # typeOriginal is NOT a jQuery property, it is our own one
-        ajaxSettings.type = "POST" # every non safe method will be replace by 'POST'
+        # typeOriginal is NOT a jQuery property of ajaxSettings, it is our own one
+        ajaxSettings.typeOriginal = httpMethod
+        # every non safe method will be replaced by 'POST'
+        ajaxSettings.type = "POST"
         # insert 'X-HTTP-Method-Override' to DATA sent to server (not sure why, but we want to be compatible with original MS library)
         ajaxSettings.data.push
             name: "X-HTTP-Method-Override"
@@ -323,14 +372,14 @@ makeAjaxCall = (jqElement, ajaxSettings) ->
 
 
 
-# vrati true, false alebo (void 0)
+# returns true, false or (void 0); we only test it on a 'false'
 validateForm = (jqForm) ->
     validationInfo = jqForm.data(DATA_VALIDATION_ATTRIBUTE)
     return validationInfo?.validate?()
 
 
 
-# Odosle obsah formulara pomocou ajax-u
+# sends form content using ajax call
 submitFormAsAjax = (jqForm, jqOriginalTarget, additionalDataToSend = []) ->
     # perform form validations, if we have some
     if validateForm(jqForm) == false
@@ -338,9 +387,9 @@ submitFormAsAjax = (jqForm, jqOriginalTarget, additionalDataToSend = []) ->
 
     # get some ajax settings from form element
     ajaxSettings =
-        url: jqForm.data("ajax-url") or jqForm.attr("action") # data-ajax-url ma prednost pred <form action/>
-        type: jqForm.data("ajax-method") or jqForm.attr("method") or "GET" # data-ajax-method ma prednost pred <form method/>
-        data: jqForm.serializeArray().concat(additionalDataToSend) # zoserializujeme formularove data a pridame 'dodatocne data'
+        url: jqForm.data("ajax-url") or jqForm.attr("action") # data-ajax-url has precedence over <form action/>
+        type: jqForm.data("ajax-method") or jqForm.attr("method") or "GET" # data-ajax-method has precedence over <form method/>
+        data: jqForm.serializeArray().concat(additionalDataToSend) # serialize form data and append additional data 'additionalDataToSend'
 
     # perform ajax call
     makeAjaxCall jqOriginalTarget, ajaxSettings
@@ -351,7 +400,7 @@ submitFormAsAjax = (jqForm, jqOriginalTarget, additionalDataToSend = []) ->
 
 $(document).ready ->
 
-    # click na ajaxovy <a />
+    # click on a ajax link <a />
     $(document).on "click", "a[data-ajax=true]", (eventObject) ->
         # 'this' = When jQuery calls a handler, the this keyword is a reference
         #          to the element where the event is being delivered; for directly
@@ -360,18 +409,20 @@ $(document).ready ->
         #          (Note that this may not be equal to 'event.target' if the event
         #          has bubbled from a descendant element.)
         # 'eventObject' = jQuery event ( see http://api.jquery.com/category/event-object/ )
-        eventObject.preventDefault() # Cancels only the default action by using the preventDefault method.
-        #debugger
+        
+        # do not make any default action, because we do the 'send form' logic itself
+        eventObject.preventDefault()
+        
         ajaxSettings =
-            url: this.href # default adresu pre AJAX si zoberieme z 'href' atributu <a /> elementu; da sa prepisat pomocou 'data-ajax-url'
-            type: "GET"    # toto je len default ak to uzivatel neprepise pomocou 'data-ajax-method'
+            url: this.href # default adress for AJAX call is from 'href' attribute of <a /> element; it can be overriden by 'data-ajax-url'
+            type: "GET"    # this is only a default method; can be overriden by 'data-ajax-method'
             data: []
         makeAjaxCall this, ajaxSettings
         return
     
 
 
-    # klik na <input type="image" ... />
+    # click on ajax <input type="image" ... />
     $(document).on "click", "form[data-ajax=true] input[type=image]", (eventObject) ->
 
         # do not make any default action, because we do the 'send form' logic itself
@@ -379,9 +430,9 @@ $(document).ready ->
 
         jqTarget = $(eventObject.target)
         name = jqTarget.attr("name")
-        # najdeme prvy najblizsi rodicovsky <form> element
+        # find first closest parent <form> element
         jqForm = jqTarget.parents("form").first()
-        # Get the current coordinates of element relative to the document
+        # get the current coordinates of element relative to the document
         offset = jqTarget.offset()
 
         # Calculate image click coords inside form-image and set .x and .y attributes accordingly
@@ -400,18 +451,18 @@ $(document).ready ->
 
     
 
-    # klik na <input type="submit" ... />
+    # click on ajax <input type="submit" ... />
     $(document).on "click", "form[data-ajax=true] :submit", (eventObject) ->
 
         # do not make any default action, because we do the 'send form' logic itself
         eventObject.preventDefault()
-        #eventObject.stopPropagation()
     
         jqTarget = $(eventObject.target)
         name = jqTarget.attr("name")
-        # najdeme prvy najblizsi rodicovsky <form> element
+        # find first closest parent <form> element
         jqForm = jqTarget.parents("form").first()
     
+        # we need to send a form 'name' of element, which triggered this send action
         dataToSend = []
         if name?
             dataToSend.push
@@ -425,16 +476,18 @@ $(document).ready ->
 
 
 
-    # ak sa niekto pokusi odoslat formular inym sposobom a nie klikom
-    # na tlacidlo, obrazok, ... (napada ma napr. ENTER na klavesnici)
+    # if someone tries to send form a different way (not really sure if any different way exist or whats the case ;-) )
+    # we do it here
     $(document).on "submit", "form[data-ajax=true]", (eventObject) ->
-        console?.log "k tomuto by sme sa nemali dostat"
+        console?.log "winf.unobtrusive-ajax.js warning - form submit was triggered directly. Please inspect the case."
 
         # do not make any default action, because we do the 'send form' logic itself
         eventObject.preventDefault()
 
+        # target should be a form itself
         jqTarget = $(eventObject.target)
 
+        # submit form using ajax call
         submitFormAsAjax jqTarget, jqTarget, []
         
         return

@@ -1,6 +1,6 @@
 Better Unobtrusive Ajax for ASP.NET MVC
 =======================================
-version 0.1 (2012-05-24)  
+version 0.1 (2012-05-25)  
 (c) 2012 Dusan Hlavaty, WorkInField s.r.o.  
 freely distributable under The MIT License (MIT)  
 https://github.com/dhlavaty/winf.unobtrusiveAjax.js
@@ -19,6 +19,12 @@ Usage:
 Just replace original 'jquery.unobtrusive-ajax.js' or 'jquery.unobtrusive-ajax.min.js' with our
 'winf.unobtrusive-ajax.js' and you are all set. All other requirements are the same as with original script
 from Microsoft, see tutorial at [http://goo.gl/3DTJY](http://goo.gl/3DTJY)
+
+Changelog:
+----------
+
+2012-05-24 ver 0.1 - Initial version  
+2012-05-25 ver 0.1 - All code comments are in English, no code changes
 
 Docs:
 -----
@@ -183,3 +189,4 @@ Params:
     Example 2:
     <a data-ajax-error="alert('Sorry error !');" ... />
 
+	

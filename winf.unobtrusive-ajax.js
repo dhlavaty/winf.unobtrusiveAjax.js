@@ -1,9 +1,10 @@
 
 /*
 Better Unobtrusive Ajax for ASP.NET MVC
-version 0.1 (2012-05-24)
-(c) 2012 Dusan Hlavaty, WorkInField s.r.o.
-freely distributable under The MIT License (MIT)
+=======================================
+version 0.1 (2012-05-25)  
+(c) 2012 Dusan Hlavaty, WorkInField s.r.o.  
+freely distributable under The MIT License (MIT)  
 https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 */
 
@@ -53,7 +54,7 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
     jqElementToUpdate = $(jqElement.data("ajax-update"));
     if (jqElementToUpdate.length < 1) {
       if (typeof console !== "undefined" && console !== null) {
-        console.log("winf.unobtrusive-ajax warning: Cannot find element from 'data-ajax-update' on a page. Do you have a correct BrowserRowId ?");
+        console.log("winf.unobtrusive-ajax warning: Cannot find element from 'data-ajax-update' on a page.");
       }
     } else {
       switch (mode.toUpperCase()) {
@@ -198,7 +199,7 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
     $(document).on("submit", "form[data-ajax=true]", function(eventObject) {
       var jqTarget;
       if (typeof console !== "undefined" && console !== null) {
-        console.log("k tomuto by sme sa nemali dostat");
+        console.log("winf.unobtrusive-ajax.js warning - form submit was triggered directly. Please inspect the case.");
       }
       eventObject.preventDefault();
       jqTarget = $(eventObject.target);
