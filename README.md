@@ -74,8 +74,8 @@ Mode of displaying ajax response sent from server. Can be "BEFORE", "AFTER" or "
 + **"REPLACE"** - response data replaces inner content of target ('data-ajax-update') element and NOT an element itseft. So every attribute (e.g. &lt;div id="someId"&gt;) of target element will stay intact. Note: Target element IS emptied before inserting.
 
 
-     Example:
-     <a data-ajax-mode="replace" ... >Some link</a>
+    Example:
+    <a data-ajax-mode="replace" ... />
 
 
 ### data-ajax-update
