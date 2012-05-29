@@ -1,6 +1,6 @@
 Better Unobtrusive Ajax for ASP.NET MVC
 =======================================
-version 0.1 (2012-05-25)  
+version 0.1.2 (2012-05-29)  
 (c) 2012 Dusan Hlavaty, WorkInField s.r.o.  
 freely distributable under The MIT License (MIT)  
 https://github.com/dhlavaty/winf.unobtrusiveAjax.js
@@ -23,8 +23,11 @@ from Microsoft, see tutorial at [http://goo.gl/3DTJY](http://goo.gl/3DTJY)
 Changelog:
 ----------
 
-2012-05-24 ver 0.1 - Initial version  
-2012-05-25 ver 0.1 - All code comments are in English, no code changes
+2012-05-24 ver 0.1   - Initial version  
+2012-05-25 ver 0.1   - All code comments are in English, no code changes  
+2012-05-25 ver 0.1.1 - FIX: ajaxError event handler was not fired correctly  
+                     - ADD: you can use [form data-ajax='true'][input type='image'] or [form][input type='image' data-ajax='true'] also  
+2012-05-29 ver 0.1.2 - ADD: some improvements inspired by Brant Burnett (http://btburnett.com/2011/01/mvc-3-unobtrusive-ajax-improvements.html)
 
 Docs:
 -----
@@ -77,8 +80,9 @@ Mode of displaying ajax response sent from server. Can be "BEFORE", "AFTER" or "
   will stay intact. Note: Target element IS emptied before inserting.
 
 
-    Example:
-    <a data-ajax-mode="replace" ... />
+
+     Example:
+     <a data-ajax-mode="replace" ... >Some link</a>
 
 
 ### data-ajax-update
@@ -189,4 +193,27 @@ Params:
     Example 2:
     <a data-ajax-error="alert('Sorry error !');" ... />
 
-	
+
+Better Unobtrusive Form Validation
+----------------------------------
+
+This library plays nice with original 'jquery.validate.unobtrusive.js' library from MVC3. It is event better.
+You can now add any forms after AJAX request, and all validations will still work.
+
+
+Global AJAX Events
+------------------
+
+Using this library rather original from MS, you can attach a global AJAX event handlers (e.g. $(document).ajaxSuccess() ) that specifically handle only
+the MVC related AJAX events. In ajaxOptions you have a variable "isMvcAjax: true" and "mvcTagetElement" is your target element as an jQuery object.
+
+    Example:
+    jQuery(document).ajaxSuccess(function(event, XMLHttpRequest, ajaxOptions) 
+                                 {
+                                     if (ajaxOptions.isMvcAjax === true) { 
+                                         ajaxOptions.mvcTagetElement.prepend('<p>Prepend something to MVC target.</p>');
+                                     }
+                                 });
+
+
+The end.

@@ -1,7 +1,7 @@
 ###
 Better Unobtrusive Ajax for ASP.NET MVC
 =======================================
-version 0.1 (2012-05-25)  
+version 0.1.2 (2012-05-29)  
 (c) 2012 Dusan Hlavaty, WorkInField s.r.o.  
 freely distributable under The MIT License (MIT)  
 https://github.com/dhlavaty/winf.unobtrusiveAjax.js
@@ -24,8 +24,11 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # Changelog:
 # ----------
 # 
-# 2012-05-24 ver 0.1 - Initial version  
-# 2012-05-25 ver 0.1 - All code comments are in English, no code changes
+# 2012-05-24 ver 0.1   - Initial version  
+# 2012-05-25 ver 0.1   - All code comments are in English, no code changes  
+# 2012-05-25 ver 0.1.1 - FIX: ajaxError event handler was not fired correctly  
+#                      - ADD: you can use [form data-ajax='true'][input type='image'] or [form][input type='image' data-ajax='true'] also  
+# 2012-05-29 ver 0.1.2 - ADD: some improvements inspired by Brant Burnett (http://btburnett.com/2011/01/mvc-3-unobtrusive-ajax-improvements.html)
 # 
 # Docs:
 # -----
@@ -78,8 +81,9 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 #   will stay intact. Note: Target element IS emptied before inserting.
 # 
 # 
-#     Example:
-#     <a data-ajax-mode="replace" ... />
+# 
+#      Example:
+#      <a data-ajax-mode="replace" ... >Some link</a>
 # 
 # 
 # ### data-ajax-update
@@ -190,12 +194,41 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 #     Example 2:
 #     <a data-ajax-error="alert('Sorry error !');" ... />
 #
+#
+# Better Unobtrusive Form Validation
+# ----------------------------------
+#
+# This library plays nice with original 'jquery.validate.unobtrusive.js' library from MVC3. It is event better.
+# You can now add any forms after AJAX request, and all validations will still work.
+#
+#
+# Global AJAX Events
+# ------------------
+#
+# Using this library rather original from MS, you can attach a global AJAX event handlers (e.g. $(document).ajaxSuccess() ) that specifically handle only
+# the MVC related AJAX events. In ajaxOptions you have a variable "isMvcAjax: true" and "mvcTagetElement" is your target element as an jQuery object.
+#
+#     Example:
+#     jQuery(document).ajaxSuccess(function(event, XMLHttpRequest, ajaxOptions) 
+#                                  {
+#                                      if (ajaxOptions.isMvcAjax === true) { 
+#                                          ajaxOptions.mvcTagetElement.prepend('<p>Prepend something to MVC target.</p>');
+#                                      }
+#                                  });
+#
+#
+# The end.
 
 $ = jQuery
 DATA_CLICK_ATTRIBUTE = "unobtrusiveAjaxClick"
 DATA_VALIDATION_ATTRIBUTE = "unobtrusiveValidation"
 
+
+
+# This function take either a function name or inline javascript code from 'jsCode'
+# and return it as a function. If no jsCode is given, it returns jQuery.noop()
 createFunctionFromCode = (jsCode, argNames) ->
+    return $.noop if not jsCode?
     fn = window
     parts = (jsCode or "").split(".")
     # .shift() removes the first element from an array and returns that element
@@ -287,8 +320,15 @@ makeAjaxCall = (jqElement, ajaxSettings) ->
     loadingDuration = jqElement.data("ajax-loading-duration") or 0
 
     defaultSettings =
-        type: jqElement.data("ajax-method") or `undefined` # The type of request to make ("POST" or "GET").
-        url: jqElement.data("ajax-url") or `undefined`     # URL of ajax call
+        # The type of request to make ("POST" or "GET")
+        type: jqElement.data("ajax-method") or `undefined`
+        # URL of ajax call
+        url: jqElement.data("ajax-url") or `undefined`
+        # set 'isMvcAjax' to 'true', so that any global ajax handler can disquinish between classical 'ajax' and our 'mvc ajax'
+        isMvcAjax: true
+        # set 'mvcTagetElement' to original target, for any purposes
+        mvcTagetElement: jqElement
+
         beforeSend: (jqXHR, settings) ->
             # pre-request callback function that can be used to modify
             # the jqXHR (in jQuery 1.4.x, XMLHTTPRequest) object before it is sent.
@@ -334,14 +374,14 @@ makeAjaxCall = (jqElement, ajaxSettings) ->
 
             return
 
-        error: (jqXHR, textStatus, errorThrown) ->
-            # A function to be called if the request fails.
-            # textStatus == "timeout", "error", "abort", and "parsererror" (or null)
-            # Note: This handler is not called for cross-domain script and JSONP requests.
-    
-            # we call code/function stored in 'data-ajax-failure'
-            createFunctionFromCode(jqElement.data("ajax-failure"), [ "jqXHR", "textStatus", "errorThrown" ])
-            return
+        #error: (jqXHR, textStatus, errorThrown) ->
+        #    # A function to be called if the request fails.
+        #    # textStatus == "timeout", "error", "abort", and "parsererror" (or null)
+        #    # Note: This handler is not called for cross-domain script and JSONP requests.
+        #    debugger
+        #    # we call code/function stored in 'data-ajax-failure'
+        #    createFunctionFromCode(jqElement.data("ajax-failure"), [ "jqXHR", "textStatus", "errorThrown" ]).apply(this, arguments)
+        #    return
 
     # combine ajax settings (defaultSettings has precedence)
     $.extend ajaxSettings, defaultSettings
@@ -423,7 +463,7 @@ $(document).ready ->
 
 
     # click on ajax <input type="image" ... />
-    $(document).on "click", "form[data-ajax=true] input[type=image]", (eventObject) ->
+    $(document).on "click", "form[data-ajax=true] input[type=image], form input[type=image][data-ajax=true]", (eventObject) ->
 
         # do not make any default action, because we do the 'send form' logic itself
         eventObject.preventDefault()
@@ -431,7 +471,7 @@ $(document).ready ->
         jqTarget = $(eventObject.target)
         name = jqTarget.attr("name")
         # find first closest parent <form> element
-        jqForm = jqTarget.parents("form").first()
+        jqForm = jqTarget.closest("form")
         # get the current coordinates of element relative to the document
         offset = jqTarget.offset()
 
@@ -460,7 +500,7 @@ $(document).ready ->
         jqTarget = $(eventObject.target)
         name = jqTarget.attr("name")
         # find first closest parent <form> element
-        jqForm = jqTarget.parents("form").first()
+        jqForm = jqTarget.closest("form")
     
         # we need to send a form 'name' of element, which triggered this send action
         dataToSend = []
