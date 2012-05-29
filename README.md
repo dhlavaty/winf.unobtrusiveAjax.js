@@ -69,16 +69,9 @@ The type of request to make ("POST" or "GET"). *jQuery documentation note: Other
 
 Mode of displaying ajax response sent from server. Can be "BEFORE", "AFTER" or "REPLACE" (default). Every other settings is threated as "REPLACE".
 
-* "BEFORE"  - response data is prepended as a first child of target ('data-ajax-update') element.
-  Note: Target element is NOT emptied before inserting.
-
-* "AFTER" - response data is appended as a last child of target ('data-ajax-update') element.
-  Note: Target element is NOT emptied before inserting.
-
-* "REPLACE" - response data replaces inner content of target ('data-ajax-update') element and
-  NOT an element itseft. So every attribute (e.g. &lt;div id="someId"&gt;) of target element
-  will stay intact. Note: Target element IS emptied before inserting.
-
++ **"BEFORE"**  - response data is prepended as a first child of target ('data-ajax-update') element. Note: Target element is NOT emptied before inserting.
++ **"AFTER"** - response data is appended as a last child of target ('data-ajax-update') element. Note: Target element is NOT emptied before inserting.
++ **"REPLACE"** - response data replaces inner content of target ('data-ajax-update') element and NOT an element itseft. So every attribute (e.g. &lt;div id="someId"&gt;) of target element will stay intact. Note: Target element IS emptied before inserting.
 
 
      Example:
