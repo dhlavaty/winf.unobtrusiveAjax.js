@@ -1,6 +1,6 @@
 Better Unobtrusive Ajax for ASP.NET MVC
 =======================================
-version 0.1.2 (2012-05-29)  
+version 0.1.3 (2012-05-31)  
 (c) 2012 Dusan Hlavaty, WorkInField s.r.o.  
 freely distributable under The MIT License (MIT)  
 https://github.com/dhlavaty/winf.unobtrusiveAjax.js
@@ -23,11 +23,17 @@ from Microsoft, see tutorial at [http://goo.gl/3DTJY](http://goo.gl/3DTJY)
 Changelog:
 ----------
 
-2012-05-24 ver 0.1   - Initial version  
-2012-05-25 ver 0.1   - All code comments are in English, no code changes  
-2012-05-25 ver 0.1.1 - FIX: ajaxError event handler was not fired correctly  
-                     - ADD: you can use [form data-ajax='true'][input type='image'] or [form][input type='image' data-ajax='true'] also  
-2012-05-29 ver 0.1.2 - ADD: some improvements inspired by Brant Burnett (http://btburnett.com/2011/01/mvc-3-unobtrusive-ajax-improvements.html)
+* 2012-05-24 ver 0.1
+   - Initial version
+* 2012-05-25 ver 0.1
+   - All code comments are in English, no code changes
+* 2012-05-25 ver 0.1.1
+   - FIX: ajaxError event handler was not fired correctly
+   - ADD: you can use `<form data-ajax='true'><input type='image'>` or `<form><input type='image' data-ajax='true'>` also
+* 2012-05-29 ver 0.1.2
+   - ADD: some improvements inspired by Brant Burnett (http://btburnett.com/2011/01/mvc-3-unobtrusive-ajax-improvements.html)
+* 2012-05-31 ver 0.1.3
+   - ADD: new `data-ajax-mode="realreplace"` introduced
 
 Docs:
 -----
@@ -72,10 +78,11 @@ Mode of displaying ajax response sent from server. Can be "BEFORE", "AFTER" or "
 + **"BEFORE"**  - response data is prepended as a first child of target ('data-ajax-update') element. Note: Target element is NOT emptied before inserting.
 + **"AFTER"** - response data is appended as a last child of target ('data-ajax-update') element. Note: Target element is NOT emptied before inserting.
 + **"REPLACE"** - response data replaces inner content of target ('data-ajax-update') element and NOT an element itseft. So every attribute (e.g. &lt;div id="someId"&gt;) of target element will stay intact. Note: Target element IS emptied before inserting.
++ **"REALREPLACE"** - will replace (data-ajax-update) element itself with all its content
 
 
-    Example:
-    <a data-ajax-mode="replace" ... />
+     Example:
+     <a data-ajax-mode="replace" ... >Some link</a>
 
 
 ### data-ajax-update

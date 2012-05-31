@@ -1,7 +1,7 @@
 ###
 Better Unobtrusive Ajax for ASP.NET MVC
 =======================================
-version 0.1.2 (2012-05-29)  
+version 0.1.3 (2012-05-31)  
 (c) 2012 Dusan Hlavaty, WorkInField s.r.o.  
 freely distributable under The MIT License (MIT)  
 https://github.com/dhlavaty/winf.unobtrusiveAjax.js
@@ -24,11 +24,17 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # Changelog:
 # ----------
 # 
-# 2012-05-24 ver 0.1   - Initial version  
-# 2012-05-25 ver 0.1   - All code comments are in English, no code changes  
-# 2012-05-25 ver 0.1.1 - FIX: ajaxError event handler was not fired correctly  
-#                      - ADD: you can use [form data-ajax='true'][input type='image'] or [form][input type='image' data-ajax='true'] also  
-# 2012-05-29 ver 0.1.2 - ADD: some improvements inspired by Brant Burnett (http://btburnett.com/2011/01/mvc-3-unobtrusive-ajax-improvements.html)
+# * 2012-05-24 ver 0.1
+#    - Initial version
+# * 2012-05-25 ver 0.1
+#    - All code comments are in English, no code changes
+# * 2012-05-25 ver 0.1.1
+#    - FIX: ajaxError event handler was not fired correctly
+#    - ADD: you can use `<form data-ajax='true'><input type='image'>` or `<form><input type='image' data-ajax='true'>` also
+# * 2012-05-29 ver 0.1.2
+#    - ADD: some improvements inspired by Brant Burnett (http://btburnett.com/2011/01/mvc-3-unobtrusive-ajax-improvements.html)
+# * 2012-05-31 ver 0.1.3
+#    - ADD: new `data-ajax-mode="realreplace"` introduced
 # 
 # Docs:
 # -----
@@ -70,16 +76,10 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # 
 # Mode of displaying ajax response sent from server. Can be "BEFORE", "AFTER" or "REPLACE" (default). Every other settings is threated as "REPLACE".
 # 
-# * "BEFORE"  - response data is prepended as a first child of target ('data-ajax-update') element.
-#   Note: Target element is NOT emptied before inserting.
-# 
-# * "AFTER" - response data is appended as a last child of target ('data-ajax-update') element.
-#   Note: Target element is NOT emptied before inserting.
-# 
-# * "REPLACE" - response data replaces inner content of target ('data-ajax-update') element and
-#   NOT an element itseft. So every attribute (e.g. &lt;div id="someId"&gt;) of target element
-#   will stay intact. Note: Target element IS emptied before inserting.
-# 
+# + **"BEFORE"**  - response data is prepended as a first child of target ('data-ajax-update') element. Note: Target element is NOT emptied before inserting.
+# + **"AFTER"** - response data is appended as a last child of target ('data-ajax-update') element. Note: Target element is NOT emptied before inserting.
+# + **"REPLACE"** - response data replaces inner content of target ('data-ajax-update') element and NOT an element itseft. So every attribute (e.g. &lt;div id="someId"&gt;) of target element will stay intact. Note: Target element IS emptied before inserting.
+# + **"REALREPLACE"** - will replace (data-ajax-update) element itself with all its content
 # 
 # 
 #      Example:
@@ -287,13 +287,24 @@ processDataOnSuccess = (element, data, contentType) ->
 
             # Note: "REPLACE" will replace inner content of (data-ajax-update) element and NOT an element itseft. So every attribute
             # of this element will stay intact.
-            else 
+            when "REPLACE"
                 # Note: In Internet Explorer up to and including version 9, setting the text content
                 # of an HTML element may corrupt the text nodes of its children that are being removed
                 # from the document as a result of the operation. If you are keeping references to these
                 # DOM elements and need them to be unchanged, use .empty().html(string) instead of .html(string)
                 # so that the elements are removed from the document before the new string is assigned to the element.
                 jqElementToUpdate.empty().html data # volanie .empty() je kvoli IE
+
+            # "REALREPLACE" will replace (data-ajax-update) element itself with all its content.
+            when "REALREPLACE"
+                jqElementToUpdate.after data
+                jqElementToUpdate.remove()
+            
+            else
+                if console?
+                    err = "winf.unobtrusive-ajax error: Unknown 'data-ajax-mode' = '" + mode + "'"
+                    console.log err
+                    alert err
   
     resetUnobtrusiveValidators()
     return
