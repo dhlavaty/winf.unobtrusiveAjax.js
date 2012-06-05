@@ -1,6 +1,6 @@
 Better Unobtrusive Ajax for ASP.NET MVC
 =======================================
-version 0.1.3 (2012-05-31)  
+version 0.1.4 (2012-09-05)  
 (c) 2012 Dusan Hlavaty, WorkInField s.r.o.  
 freely distributable under The MIT License (MIT)  
 https://github.com/dhlavaty/winf.unobtrusiveAjax.js
@@ -16,24 +16,28 @@ with latest jQuery.
 Usage:
 ------
 
-Just replace original 'jquery.unobtrusive-ajax.js' or 'jquery.unobtrusive-ajax.min.js' with our
-'winf.unobtrusive-ajax.js' and you are all set. All other requirements are the same as with original script
+Just replace original `jquery.unobtrusive-ajax.js` or `jquery.unobtrusive-ajax.min.js` with our
+`winf.unobtrusive-ajax.js` and you are all set. All other requirements are the same as with original script
 from Microsoft, see tutorial at [http://goo.gl/3DTJY](http://goo.gl/3DTJY)
 
 Changelog:
 ----------
 
-* 2012-05-24 ver 0.1
-   - Initial version
-* 2012-05-25 ver 0.1
-   - All code comments are in English, no code changes
+* 2012-06-05 ver 0.1.4
+   - FIX: error handler was commented out by mistake
+   - CHANGE: some minor documentation changes
+* 2012-05-31 ver 0.1.3
+   - ADD: new `data-ajax-mode="realreplace"` introduced
+* 2012-05-29 ver 0.1.2
+   - ADD: some improvements inspired by Brant Burnett (http://btburnett.com/2011/01/mvc-3-unobtrusive-ajax-improvements.html)
 * 2012-05-25 ver 0.1.1
    - FIX: ajaxError event handler was not fired correctly
    - ADD: you can use `<form data-ajax='true'><input type='image'>` or `<form><input type='image' data-ajax='true'>` also
-* 2012-05-29 ver 0.1.2
-   - ADD: some improvements inspired by Brant Burnett (http://btburnett.com/2011/01/mvc-3-unobtrusive-ajax-improvements.html)
-* 2012-05-31 ver 0.1.3
-   - ADD: new `data-ajax-mode="realreplace"` introduced
+* 2012-05-25 ver 0.1
+   - All code comments are in English, no code changes
+* 2012-05-24 ver 0.1
+   - Initial version
+
 
 Docs:
 -----
