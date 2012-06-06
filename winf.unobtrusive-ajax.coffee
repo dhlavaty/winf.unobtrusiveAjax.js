@@ -72,7 +72,8 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # 
 # ### data-ajax-method
 # 
-# The type of request to make ("POST" or "GET"). *jQuery documentation note: Other HTTP request methods, such as "PUT" and "DELETE", can also be used here, but they are not supported by all browsers.*
+# The type of request to make (`POST` or `GET`). *jQuery documentation note: Other HTTP request methods, such as `PUT` and `DELETE`, can also be used here, but they are not supported by all browsers.*
+# This library uses `X-HTTP-Method-Override` HTTP header command to support `PUT` and `DELETE` in these browsers too.
 # 
 #     Example:
 #     <a data-ajax-method="post" ... />
@@ -80,12 +81,12 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # 
 # ### data-ajax-mode
 # 
-# Mode of displaying ajax response sent from server. Can be "BEFORE", "AFTER" or "REPLACE" (default). Every other settings is threated as "REPLACE".
+# Mode of displaying ajax response sent from server. Can be `BEFORE`, `AFTER`, `REPLACE` or 'REALREPLACE'
 # 
-# + **"BEFORE"**  - response data is prepended as a first child of target ('data-ajax-update') element. Note: Target element is NOT emptied before inserting.
-# + **"AFTER"** - response data is appended as a last child of target ('data-ajax-update') element. Note: Target element is NOT emptied before inserting.
-# + **"REPLACE"** - response data replaces inner content of target ('data-ajax-update') element and NOT an element itseft. So every attribute (e.g. &lt;div id="someId"&gt;) of target element will stay intact. Note: Target element IS emptied before inserting.
-# + **"REALREPLACE"** - will replace (data-ajax-update) element itself with all its content
+# + **"BEFORE"**  - response data is prepended as a first child of target (`data-ajax-update`) element. Note: Target element is NOT emptied before inserting.
+# + **"AFTER"** - response data is appended as a last child of target (`data-ajax-update`) element. Note: Target element is NOT emptied before inserting.
+# + **"REPLACE"** - response data replaces inner content of target (`data-ajax-update`) element and NOT an element itseft. So every attribute (e.g. `<div id="someId">`) of target element will stay intact. Note: Target element IS emptied before inserting.
+# + **"REALREPLACE"** - will replace (`data-ajax-update`) element itself with all its content
 # 
 # 
 #      Example:
@@ -103,7 +104,7 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # 
 # ### data-ajax-url
 # 
-# URL of ajax request to perform. If this attribute is not defined in <a /> element, the 'href' attribute will be used.
+# URL of ajax request to perform. If this attribute is not defined in <a /> element, the `href` attribute will be used.
 # 
 #     Example:
 #     <a data-ajax-url="http://www.acme.com/ajax" href="http://www.acme.com/nonajax" ... />
@@ -112,7 +113,7 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # ### data-ajax-begin
 # 
 # event callback, which is called before ajax request itself is fired.
-# Returning "false" from this callback will cancel the request.
+# Returning `false` from this callback will cancel the request.
 # If attribute contains an function name, this function is called with signature:
 # 
 # `function beforeAjaxRequest(jqXHR)`  
@@ -141,8 +142,8 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # **jqXHR** - is an jQuery XHR object (see http://api.jquery.com/Types/#jqXHR
 #             and http://api.jquery.com/jQuery.ajax/#jqXHR )
 # 
-# **textStatus** - can be "success", "notmodified", "error", "timeout", "abort" or "parsererror"
-#                  (see paragraph "complete(jqXHR, textStatus)" at http://api.jquery.com/jQuery.ajax/)
+# **textStatus** - can be `success`, `notmodified`, `error`, `timeout`, `abort` or `parsererror`
+#                  (see paragraph `complete(jqXHR, textStatus)` at http://api.jquery.com/jQuery.ajax/)
 # 
 #     Example 1:
 #     <script> function CompleteSendFunctionName(jqXHR, textStatus) { alert('All done'); } </script>
@@ -162,7 +163,7 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # **data** - the data returned from the server
 # 
 # **textStatus** - a string describing the status
-#                  (see paragraph "success(data, textStatus, jqXHR)" at http://api.jquery.com/jQuery.ajax/)
+#                  (see paragraph `success(data, textStatus, jqXHR)` at http://api.jquery.com/jQuery.ajax/)
 # 
 # **jqXHR** - is an jQuery XHR object (see http://api.jquery.com/Types/#jqXHR
 #             and http://api.jquery.com/jQuery.ajax/#jqXHR )
@@ -187,11 +188,11 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # **jqXHR** - is an jQuery XHR object (see http://api.jquery.com/Types/#jqXHR
 #             and http://api.jquery.com/jQuery.ajax/#jqXHR )
 # 
-# **textStatus** - "timeout", "error", "abort", and "parsererror" (or null)
-#                  (see paragraph "error(jqXHR, textStatus, errorThrown)" at http://api.jquery.com/jQuery.ajax/)
+# **textStatus** - `timeout`, `error`, `abort`, and `parsererror` or `null`
+#                  (see paragraph `error(jqXHR, textStatus, errorThrown)` at http://api.jquery.com/jQuery.ajax/)
 # 
 # **errorThrown** - when an HTTP error occurs, errorThrown receives the textual portion
-#                   of the HTTP status, such as "Not Found" or "Internal Server Error."
+#                   of the HTTP status, such as `Not Found` or `Internal Server Error.`
 # 
 #     Example 1:
 #     <script> function ErrorSendFunctionName(jqXHR, textStatus, errorThrown) { alert('Sorry error !'); } </script>
@@ -204,7 +205,7 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # Better Unobtrusive Form Validation
 # ----------------------------------
 #
-# This library plays nice with original 'jquery.validate.unobtrusive.js' library from MVC3. It is event better.
+# This library plays nice with original `jquery.validate.unobtrusive.js` library from MVC3. It is even better.
 # You can now add any forms after AJAX request, and all validations will still work.
 #
 #
