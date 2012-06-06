@@ -1,7 +1,7 @@
 ###
 Better Unobtrusive Ajax for ASP.NET MVC
 =======================================
-version 0.1.4 (2012-09-05)  
+version 0.1.5 (2012-06-06)  
 (c) 2012 Dusan Hlavaty, WorkInField s.r.o.  
 freely distributable under The MIT License (MIT)  
 https://github.com/dhlavaty/winf.unobtrusiveAjax.js
@@ -24,6 +24,8 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # Changelog:
 # ----------
 # 
+# * 2012-06-06 ver 0.1.5
+#    - FIX: unobtrusive Ajax always expects 'html' code to be returned from server, so we set `dataType: "html"`. Now MVC controller can return `null` and this library behaves correctly.
 # * 2012-06-05 ver 0.1.4
 #    - FIX: error handler was commented out by mistake
 #    - CHANGE: some minor documentation changes
@@ -335,6 +337,8 @@ makeAjaxCall = (jqElement, ajaxSettings) ->
     loadingDuration = jqElement.data("ajax-loading-duration") or 0
 
     defaultSettings =
+        # Returns HTML as plain text; included script tags are evaluated when inserted in the DOM.
+        dataType: "html"
         # The type of request to make ("POST" or "GET")
         type: jqElement.data("ajax-method") or `undefined`
         # URL of ajax call

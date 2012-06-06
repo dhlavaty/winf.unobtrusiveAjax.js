@@ -1,6 +1,6 @@
 Better Unobtrusive Ajax for ASP.NET MVC
 =======================================
-version 0.1.4 (2012-09-05)  
+version 0.1.5 (2012-06-06)  
 (c) 2012 Dusan Hlavaty, WorkInField s.r.o.  
 freely distributable under The MIT License (MIT)  
 https://github.com/dhlavaty/winf.unobtrusiveAjax.js
@@ -23,6 +23,8 @@ from Microsoft, see tutorial at [http://goo.gl/3DTJY](http://goo.gl/3DTJY)
 Changelog:
 ----------
 
+* 2012-06-06 ver 0.1.5
+   - FIX: unobtrusive Ajax always expects 'html' code to be returned from server, so we set `dataType: "html"`. Now MVC controller can return `null` and this library behaves correctly.
 * 2012-06-05 ver 0.1.4
    - FIX: error handler was commented out by mistake
    - CHANGE: some minor documentation changes
