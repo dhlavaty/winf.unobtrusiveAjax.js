@@ -1,7 +1,7 @@
 ###
 Better Unobtrusive Ajax for ASP.NET MVC
 =======================================
-version 0.1.5 (2012-06-06)  
+version 0.1.6 (2012-08-03)  
 (c) 2012 Dusan Hlavaty, WorkInField s.r.o.  
 freely distributable under The MIT License (MIT)  
 https://github.com/dhlavaty/winf.unobtrusiveAjax.js
@@ -24,6 +24,9 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # Changelog:
 # ----------
 # 
+# * 2012-08-03 ver 0.1.6
+#    - ADD: new `data-ajax-update-closest=""` attribute introduced
+#    - ADD: automatically ajax-submit 'select' element, if it has `data-ajax="true"` attribute
 # * 2012-06-06 ver 0.1.5
 #    - FIX: unobtrusive Ajax always expects 'html' code to be returned from server, so we set `dataType: "html"`. Now MVC controller can return `null` and this library behaves correctly.
 # * 2012-06-05 ver 0.1.4
@@ -48,6 +51,26 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # All ajax data attributes are 100% compatible with Microsoft ASP.NET MVC 3 - [http://www.asp.net/mvc/mvc3](http://www.asp.net/mvc/mvc3)
 # 
 # 
+# ### data-ajax="true"
+# 
+# attribute activates Unobtrusive Ajax library. It can be used on `form`, `a`, `input[type="image"]` and/or `select` element.
+# 
+#     Example 1:
+#     <form data-ajax="true" ... ><!-- Performs AJAX on entire form -->
+#     ...</form>
+# 
+#     Example 2:
+#     <a data-ajax="true" ... >Link text - performs AJAX only on this anchor</a>
+# 
+#     Example 3:
+#     <input type="image" data-ajax="true" ... />
+# 
+#     Example 4:
+#     <select name="selectName" data-ajax="true" data-ajax-url="http://example-url/" ... >
+#       <option value="1">Option 1</option>
+#     </select>
+# 
+# 
 # ### data-ajax-loading
 # 
 # attribute which contains element selector to element showing "LOADING IN PROGRESS" text
@@ -59,7 +82,7 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # 
 #     Example:
 #     <div id="loading">AJAX IS IN PROGRESS</div>
-#     <a data-ajax-loading="#loading" data-ajax-loading-duration="1000" ... />
+#     <a data-ajax="true" data-ajax-loading="#loading" data-ajax-loading-duration="1000" ... />
 # 
 # 
 # ### data-ajax-confirm
@@ -81,7 +104,7 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # 
 # ### data-ajax-mode
 # 
-# Mode of displaying ajax response sent from server. Can be `BEFORE`, `AFTER`, `REPLACE` or 'REALREPLACE'
+# Mode of displaying ajax response sent from server. Can be `BEFORE`, `AFTER`, `REPLACE` or `REALREPLACE`
 # 
 # + **"BEFORE"**  - response data is prepended as a first child of target (`data-ajax-update`) element. Note: Target element is NOT emptied before inserting.
 # + **"AFTER"** - response data is appended as a last child of target (`data-ajax-update`) element. Note: Target element is NOT emptied before inserting.
@@ -89,8 +112,8 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # + **"REALREPLACE"** - will replace (`data-ajax-update`) element itself with all its content
 # 
 # 
-#      Example:
-#      <a data-ajax-mode="replace" ... >Some link</a>
+#     Example:
+#     <a data-ajax-mode="replace" ... >Some link</a>
 # 
 # 
 # ### data-ajax-update
@@ -100,6 +123,16 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 #     Example:
 #     <div id="ajaxTarget">...this will be replaced with ajax response...</div>
 #     <a data-ajax-update="#ajaxTarget" data-ajax-mode="replace" ... />
+# 
+# 
+# ### data-ajax-update-closest
+# 
+# attribute which contains closest element selector from current element in which ajax response will be shown.
+# It uses .closest(selector) jQuery method, so look for documentation at http://api.jquery.com/closest/
+# 
+#     Example:
+#     <div>...this will be replaced with ajax response...
+#     <a data-ajax-update-closest="div" data-ajax-mode="replace" ... /></div>
 # 
 # 
 # ### data-ajax-url
@@ -277,7 +310,13 @@ processDataOnSuccess = (element, data, contentType) ->
 
     mode = jqElement.data("ajax-mode") or ""
 
-    jqElementToUpdate = $(jqElement.data("ajax-update"))
+    closestSelector = jqElement.data "ajax-update-closest"
+    if closestSelector?
+        # If we have 'data-ajax-update-closest' attribute, we use .closest() jQuery method to find a target
+        jqElementToUpdate = jqElement.closest closestSelector
+    else
+        # otherwise we use 'ajax-update'
+        jqElementToUpdate = $(jqElement.data("ajax-update"))
 
     # This is just a simple validation, that 'data-ajax-update' points to an existing element on a page
     if jqElementToUpdate.length < 1
@@ -480,6 +519,29 @@ $(document).ready ->
         makeAjaxCall this, ajaxSettings
         return
     
+
+
+    $(document).on "change", "select[data-ajax=true]", (eventObject) ->
+
+        # do not make any default action, because we do the 'send' logic itself
+        eventObject.preventDefault()
+
+        jqTarget = $(eventObject.target)
+        #name = jqTarget.attr("name")
+
+        # we need to send a 'name' of element, which triggered this send action
+        #dataToSend = []
+        #if name?
+        #    dataToSend.push
+        #        'name' : name
+        #        'value': jqTarget.val()
+
+        #console?.log 'change event', dataToSend
+        
+        # submitFormAsAjax() is good even when we are not really sending a form
+        submitFormAsAjax jqTarget, jqTarget, []
+        return
+
 
 
     # click on ajax <input type="image" ... />
