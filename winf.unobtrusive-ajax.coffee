@@ -1,7 +1,7 @@
 ###
 Better Unobtrusive Ajax for ASP.NET MVC
 =======================================
-version 0.1.6 (2012-08-03)  
+version 0.1.7 (2012-08-28)  
 (c) 2012 Dusan Hlavaty, WorkInField s.r.o.  
 freely distributable under The MIT License (MIT)  
 https://github.com/dhlavaty/winf.unobtrusiveAjax.js
@@ -24,6 +24,8 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # Changelog:
 # ----------
 # 
+# * 2012-08-28 ver 0.1.7
+#    - ADD: new `data-ajax-mode="beforeelement"` and `data-ajax-mode="afterelement"` introduced
 # * 2012-08-03 ver 0.1.6
 #    - ADD: new `data-ajax-update-closest=""` attribute introduced
 #    - ADD: automatically ajax-submit 'select' element, if it has `data-ajax="true"` attribute
@@ -106,14 +108,16 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # 
 # Mode of displaying ajax response sent from server. Can be `BEFORE`, `AFTER`, `REPLACE` or `REALREPLACE`
 # 
-# + **"BEFORE"**  - response data is prepended as a first child of target (`data-ajax-update`) element. Note: Target element is NOT emptied before inserting.
-# + **"AFTER"** - response data is appended as a last child of target (`data-ajax-update`) element. Note: Target element is NOT emptied before inserting.
-# + **"REPLACE"** - response data replaces inner content of target (`data-ajax-update`) element and NOT an element itseft. So every attribute (e.g. `<div id="someId">`) of target element will stay intact. Note: Target element IS emptied before inserting.
-# + **"REALREPLACE"** - will replace (`data-ajax-update`) element itself with all its content
+# + **"BEFORE"**  - response data is prepended with [jQuery.prepend()](http://api.jquery.com/prepend/) as a first child of target (`data-ajax-update`) element. Note: Target element is NOT emptied before inserting.
+# + **"AFTER"** - response data is appended with [jQuery.append()](http://api.jquery.com/append/) as a last child of target (`data-ajax-update`) element. Note: Target element is NOT emptied before inserting.
+# + **"REPLACE"** - response data replaces with [jQuery.empty()](http://api.jquery.com/empty/).[html()](http://api.jquery.com/html/) inner content of target (`data-ajax-update`) element and NOT an element itseft. So every attribute (e.g. `<div id="someId">`) of target element will stay intact. Note: Target element IS emptied before inserting.
+# + **"REALREPLACE"** - will replace (`data-ajax-update`) element itself with all its content. Uses [jQuery.after()](http://api.jquery.com/after/) and [jQuery.remove()](http://api.jquery.com/remove/) combo.
+# + **"BEFOREELEMENT"** - response data is inserted before (`data-ajax-update`) element. Uses [jQuery.before()](http://api.jquery.com/before/)
+# + **"AFTERELEMENT"** - response data is inserted after (`data-ajax-update`) element. Uses [jQuery.after()](http://api.jquery.com/after/)
 # 
 # 
 #     Example:
-#     <a data-ajax-mode="replace" ... >Some link</a>
+#     < a data-ajax-mode="replace" ... >Some link< /a>
 # 
 # 
 # ### data-ajax-update
@@ -345,6 +349,14 @@ processDataOnSuccess = (element, data, contentType) ->
             when "REALREPLACE"
                 jqElementToUpdate.after data
                 jqElementToUpdate.remove()
+
+            # BEFORE ELEMENT insert content before (data-ajax-update) element.
+            when "BEFOREELEMENT"
+                jqElementToUpdate.before data
+
+            # BEFORE ELEMENT insert content after (data-ajax-update) element.
+            when "AFTERELEMENT"
+                jqElementToUpdate.after data
             
             else
                 if console?
