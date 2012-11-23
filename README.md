@@ -1,6 +1,6 @@
 Better Unobtrusive Ajax for ASP.NET MVC
 =======================================
-version 0.1.7 (2012-08-28)  
+version 0.1.8 (2012-11-23)  
 (c) 2012 Dusan Hlavaty, WorkInField s.r.o.  
 freely distributable under The MIT License (MIT)  
 https://github.com/dhlavaty/winf.unobtrusiveAjax.js
@@ -23,6 +23,8 @@ from Microsoft, see tutorial at [http://goo.gl/3DTJY](http://goo.gl/3DTJY)
 Changelog:
 ----------
 
+* 2012-11-23 ver 0.1.8
+   - ADD: new `data-ajax="false"` support
 * 2012-08-28 ver 0.1.7
    - ADD: new `data-ajax-mode="beforeelement"` and `data-ajax-mode="afterelement"` introduced
 * 2012-08-03 ver 0.1.6
@@ -70,6 +72,18 @@ attribute activates Unobtrusive Ajax library. It can be used on `form`, `a`, `in
     <select name="selectName" data-ajax="true" data-ajax-url="http://example-url/" ... >
       <option value="1">Option 1</option>
     </select>
+
+
+### data-ajax="false"
+
+attribute explicitly deactivates Unobtrusive Ajax library. It can be used on `buttom`, `a`, `input` and/or `select` element.
+
+    Example:
+    <form data-ajax="true" ... ><!-- Performs AJAX on entire form except where data-ajax=='false' -->
+      <button data-ajax="false">THIS WILL NOT USE AJAX</button>
+      <button>THIS WILL USE AJAX</button>
+    ...</form>
+
 
 
 ### data-ajax-loading
