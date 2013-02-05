@@ -1,0 +1,33 @@
+{
+    "name": "winf.unobtrusive-ajax",
+	"version": "0.1.8",
+    "title": "Better Unobtrusive Ajax (not only for ASP.NET MVC)",
+	"author": {
+        "name": "Dušan Hlavatý",
+        "url": "https://github.com/dhlavaty",
+		"email": "dhlavaty@gmail.com"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://opensource.org/licenses/MIT"
+        }
+    ],
+	"dependencies": {
+        "jquery": ">=1.6"
+    },
+	
+	"description": "Unobtrusive AJAX library done right. 100% compatible with 'Microsofts Unobtrusive Ajax support library for jQuery' found in ASP.NET MVC3 and MVC4 without bugs, with new features, clean and well documented, compatible with latest jQuery.",
+	"keywords": [
+        "ajax",
+		"json",
+        "unobtrusive",
+        "html5",
+		"dotnet",
+		"mvc",
+        "aspnet"
+    ],
+    "bugs": "https://github.com/dhlavaty/winf.unobtrusiveAjax.js/issues",
+    "homepage": "https://github.com/dhlavaty/winf.unobtrusiveAjax.js",
+    "docs": "https://github.com/dhlavaty/winf.unobtrusiveAjax.js/blob/master/README.md"   
+}
