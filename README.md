@@ -1,6 +1,6 @@
-Better Unobtrusive Ajax for ASP.NET MVC
-=======================================
-version 0.1.8 (2012-11-23)  
+Better Unobtrusive Ajax (not only for ASP.NET MVC)
+==================================================
+version 0.1.9 (2013-07-17)  
 (c) 2012 Dusan Hlavaty, WorkInField s.r.o.  
 freely distributable under The MIT License (MIT)  
 https://github.com/dhlavaty/winf.unobtrusiveAjax.js
@@ -11,18 +11,20 @@ Purpose:
 
 Purpose of this library is to be 100% compatible with 'Microsofts Unobtrusive Ajax support library for jQuery'
 found in ASP.NET MVC3 and MVC4 but without bugs, with new features, clean and well documented code and compatible
-with latest jQuery.
+with latest jQuery. Library is also fully usable without ASP.NET MVC.
 
 Usage:
 ------
 
-Just replace original `jquery.unobtrusive-ajax.js` or `jquery.unobtrusive-ajax.min.js` with our
-`winf.unobtrusive-ajax.js` and you are all set. All other requirements are the same as with original script
+If you use ASP.NET MVC, just replace original `jquery.unobtrusive-ajax.js` or `jquery.unobtrusive-ajax.min.js`
+with our `winf.unobtrusive-ajax.js` and you are all set. All other requirements are the same as with original script
 from Microsoft, see tutorial at [http://goo.gl/3DTJY](http://goo.gl/3DTJY)
 
 Changelog:
 ----------
 
+* 2013-07-17 ver 0.1.9
+   - ADD: new `data-ajax-disable-onclick="true"` introduced
 * 2012-11-23 ver 0.1.8
    - ADD: new `data-ajax="false"` support
 * 2012-08-28 ver 0.1.7
@@ -76,7 +78,7 @@ attribute activates Unobtrusive Ajax library. It can be used on `form`, `a`, `in
 
 ### data-ajax="false"
 
-attribute explicitly deactivates Unobtrusive Ajax library. It can be used on `buttom`, `a`, `input` and/or `select` element.
+attribute explicitly deactivates Unobtrusive Ajax library. It can be used on `button`, `a`, `input` and/or `select` element.
 
     Example:
     <form data-ajax="true" ... ><!-- Performs AJAX on entire form except where data-ajax=='false' -->
@@ -106,6 +108,14 @@ attribute contains a confirmation question. If user hit CANCEL button on a confi
 
     Example:
     <a data-ajax-confirm="Are you sure to delete entry ?" ... />
+
+
+### data-ajax-disable-onclick="true"
+
+Disable element after user clicks on it, to prevent multiple postbacks to server. It can be used on `button`, `input` or `a` element.
+
+    Example:
+      <button data-ajax="true" data-ajax-disable-onclick="true">Disables after click</button>
 
 
 ### data-ajax-method
