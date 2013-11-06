@@ -1,7 +1,7 @@
 ###
 Better Unobtrusive Ajax (not only for ASP.NET MVC)
 ==================================================
-version 0.1.9 (2013-07-17)  
+version 0.2.0 (2013-11-06)  
 (c) 2012 Dusan Hlavaty, WorkInField s.r.o.  
 freely distributable under The MIT License (MIT)  
 https://github.com/dhlavaty/winf.unobtrusiveAjax.js
@@ -24,6 +24,8 @@ https://github.com/dhlavaty/winf.unobtrusiveAjax.js
 # Changelog:
 # ----------
 # 
+# * 2013-11-06 ver 0.2.0
+#    - ADD: After DOM insertion, we focus on inserted element with autofocus attribute
 # * 2013-07-17 ver 0.1.9
 #    - ADD: new `data-ajax-disable-onclick="true"` introduced
 # * 2012-11-23 ver 0.1.8
@@ -346,6 +348,9 @@ processDataOnSuccess = (element, data, contentType) ->
         # otherwise we use 'ajax-update'
         jqElementToUpdate = $(jqElement.data("ajax-update"))
 
+    # We change data to jQuery object before inserting into DOM (this helps us autofocus after DOM insertion)
+    data = jQuery data
+
     # This is just a simple validation, that 'data-ajax-update' points to an existing element on a page
     if jqElementToUpdate.length < 1
         console?.log "winf.unobtrusive-ajax warning: Cannot find element from 'data-ajax-update' on a page."
@@ -389,6 +394,9 @@ processDataOnSuccess = (element, data, contentType) ->
                     alert err
   
     resetUnobtrusiveValidators()
+
+    # Try autofocus on element with autofocus attribute
+    data.find('[autofocus]').focus()
     return
 
 
