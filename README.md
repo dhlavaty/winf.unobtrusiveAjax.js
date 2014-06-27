@@ -4,6 +4,7 @@ version 0.2.0 (2013-11-06)
 (c) 2012 Dusan Hlavaty, WorkInField s.r.o.  
 freely distributable under The MIT License (MIT)  
 https://github.com/dhlavaty/winf.unobtrusiveAjax.js
+Development sponsored by http://www.vezma.com/
 
 
 Purpose:
@@ -12,6 +13,9 @@ Purpose:
 Purpose of this library is to be 100% compatible with 'Microsofts Unobtrusive Ajax support library for jQuery'
 found in ASP.NET MVC3 and MVC4 but without bugs, with new features, clean and well documented code and compatible
 with latest jQuery. Library is also fully usable without ASP.NET MVC.
+
+Library development is sponsored and heavily used in production
+by [VEZMA GPS Mileage and MPG Tracker](http://www.vezma.com/).
 
 Usage:
 ------
