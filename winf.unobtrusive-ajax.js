@@ -4,7 +4,7 @@ Better Unobtrusive Ajax (not only for ASP.NET MVC)
 version 0.2.0 (2013-11-06)  
 (c) 2012 Dusan Hlavaty, WorkInField s.r.o.  
 freely distributable under The MIT License (MIT)  
-https://github.com/dhlavaty/winf.unobtrusiveAjax.js
+https://github.com/dhlavaty/winf.unobtrusiveAjax.js  
 Development sponsored by http://www.vezma.com/
 */
 
